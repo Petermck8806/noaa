@@ -1,0 +1,15 @@
+{
+  "name": "nodeweatherdata",
+  "version": "1.0.0",
+  "description": "Test api calls to NOAA weather service",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "pmckinney",
+  "license": "ISC",
+  "dependencies": {
+    "http": "0.0.0",
+    "https": "^1.0.0"
+  }
+}
