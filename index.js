@@ -1,24 +1,25 @@
 'use strict'
-var https = require('https');
 var http = require('http');
-var options = {
-    host: 'forecast.weather.gov',
-    path: '/MapClick.php?lat=38.4247341&lon=-86.9624086&FcstType=json'
-}
+var lat = Math.floor(Math.random() * 90) * (Math.random() < 0.5 ? -1 : 1);
+var long = Math.floor(Math.random() * 180) * (Math.random() < 0.5 ? -1 : 1);
 
 var main = function(){
-    //obtain weather data from host/path.
-    var noaa = getNoaaData(function(err, data){
+    console.log('lat: ' + lat + '   long: ' + long);
+    var x = getForecast(lat, long, function(err, data) {
         if(err){
-            console.log('something happened that is not that great!');
-            return err;
+            console.log(err);
         }
-
         console.log(data);
     });
 }
 
-function getNoaaData(callback){
+function getForecast(lat, long, callback){
+    var options = {
+        host: 'forecast.weather.gov',
+        path: '/MapClick.php?lat=40.77&lon=-73.94&FcstType=json',
+        headers: {'user-agent': 'NewApp/5.0'}   
+    }
+
     http.get(options, function(res) {
         var body = '';
         res.on('data', function(responseBody){
@@ -26,9 +27,13 @@ function getNoaaData(callback){
         });
 
         res.on('end', function() {
-            console.log(body);
-            var parsed = JSON.parse(body);
-            callback(null, parsed);
+            try{
+                var parsed = JSON.parse(body);
+                callback(null, parsed.currentobservation);
+            } 
+            catch(e){
+                callback(e);
+            }
         });
 
         res.on('error', function(err) {
